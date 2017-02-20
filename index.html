@@ -1,0 +1,554 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+		<!-- slick -->
+		<link rel="stylesheet" href="css/slick.css" />
+		<link rel="stylesheet" href="css/slick-theme.css" />
+		<!-- font-awesome -->
+	    <link rel="stylesheet" href="css/font-awesome.min.css" />
+	    <link rel="stylesheet" href="css/font-awesome.css" />
+
+		<style>
+			*{
+				font-family:Microsoft JhengHei,arial, helvetica, sans-serif;
+				-webkit-box-sizing: border-box;
+			    -moz-box-sizing: border-box;
+			    box-sizing: border-box;
+			}
+
+			*:focus{
+				outline: none;
+			}
+
+			html{
+				font-size: 16px;
+			}
+
+			body{
+				margin: 0;
+				padding: 0;
+				background-color: #FFFFFF;
+			}
+
+			a{
+				text-decoration: none;
+			}
+
+			#search-tool{
+				position: fixed;
+				width: 100%;
+				bottom: 0;
+				z-index: 400;
+			}
+
+			#search-tool-button{
+				position: relative;
+				left: 0;
+				right: 0;
+				bottom: 1rem;
+				margin: auto;
+				background-color: #E9B12F;
+				padding: 0.25rem;
+				border: 1px solid #E9B12F;
+				border-radius: 50%;
+				width: 4rem;
+				height: 4rem;
+				cursor: pointer;
+				-webkit-transition: all 0.5s; 
+    			transition: all 0.5s;
+    			text-align: center;
+    			box-shadow: 0px 0px 15px 1px #333333;
+			}
+
+			#search-tool-button > i{
+				width: 3rem;
+				height: 3rem;
+				line-height: 3rem;
+				font-size: 3rem;
+			}
+
+			#search-tool-button.active{
+				-webkit-transform: rotate(360deg);
+				transform: rotate(360deg);
+			}
+
+			#search-tool-content{
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 6.25rem;
+				margin: auto;
+				width: 20rem;
+				padding: 0.5rem 0.25rem;
+				border-radius: 4px;
+				background-color: #FFF;
+				display: none;
+			}
+
+			#search-tool-content:after{
+				content: "";
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: -2rem;
+				margin: auto;
+				width: 0;
+				height: 0;
+				border: 1rem solid transparent;
+				border-top-color: #FFF;
+			}
+
+			#search-tool-content > .zodiac-row{
+				text-align: center;
+			}
+
+			#search-tool-content > .zodiac-row:not(:last-child){
+				margin-bottom: 0.5rem;
+			}
+
+			#search-tool-content > .zodiac-row > div{
+				display: inline-block;
+				padding: 0.5rem 0.5rem;
+				margin: 0 1rem;
+				text-align: center;
+				border: 2px solid #000;
+				border-radius: 10px;
+				cursor: pointer;
+				box-shadow: 0px 0px 5px 1px #333333;
+			}
+
+			#search-tool-content > .zodiac-row > div:hover{
+				background-color: #CCCCCC;
+			}
+
+			#search-tool-content > .zodiac-row > div > img{
+				width: 3rem;
+				height: 3rem;
+			}
+
+			#toolBar{
+				position: fixed;
+				height: 3.5rem;
+				width: 100%;
+				background-color: #7F46EF;
+				z-index: 200;
+			}
+
+			#topControl-menu{
+				position: absolute;
+				top: 50%;
+				left: 1rem;
+				height: 2rem;
+				width: 2rem;
+				margin-top: -1rem;
+				cursor: pointer;
+			}
+
+			[class*=topControl-menu]{
+				position: absolute;
+				left: 50%;
+				height: 0px;
+				width: 60%;
+				margin-left: -30%;
+				border: 1px solid #FFF;
+			}
+
+			.topControl-menu1{
+				top: 25%;
+			}
+
+			.topControl-menu2{
+				top: 50%;
+			}
+
+			.topControl-menu3{
+				top: 75%;
+			}
+
+			#menu{
+				position: fixed;
+				top: 3.5rem;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: 999;
+				display: none;
+			}
+
+			#menuPanel{
+				position: absolute;
+				width: 15rem;
+				height: 100%;
+				left: -15rem;
+				background-color: #FFF;
+				color: #666666;
+			}
+
+			#menuPanel > img {
+				width: 100%;
+				height: auto;
+			}
+
+			#menuPanel > a{
+				color: #666666;
+			}
+
+			#menuPanel > a.active{
+				color: #569AF3;
+			}
+
+			#menuPanel > a > div{
+				font-size: 1.25rem;
+				padding-top: 1rem;
+				padding-bottom: 1rem;
+				cursor: pointer;
+			}
+
+			#menuPanel > a > div:hover{
+				background-color: #CCC;
+			}
+
+			#menuPanel > a > div > i{
+				width: 30px;
+				text-align: center;
+				font-size: 1.5rem;
+				margin-left: 1.5rem;
+				margin-right: 2rem;
+			}
+
+			#content{
+				width: 100%;
+				
+				z-index: 100;
+				text-align: center;
+			}
+
+			.data{
+				position: relative;
+				width: 100%;
+				height: 5rem;
+				padding-top: 0.5rem;
+				padding-bottom: 0.5rem;
+				border-bottom: 1px #C8C8C8 solid;
+			}
+
+			.data-number{
+				position: relative;
+				width: 4rem;
+				height: 100%;
+				line-height: 4rem;
+				font-size: 2rem;
+				text-align: center;
+				background-color: #5E92FC;
+				color: #FFF;
+			}
+			.data-name{
+				position: absolute;
+				width: calc(100% - 4.5rem);
+				height: 2rem;
+				left: 4.5rem;
+				top: 0.5rem;
+				line-height: 2rem;
+				font-size: 1rem;
+				color: #FFF;
+			}
+			.data-birthday{
+				position: absolute;
+				width: calc(100% - 4.5rem);
+				height: 2rem;
+				left: 4.5rem;
+				top: 2.5rem;
+				line-height: 2rem;
+				font-size: 1rem; 
+				color: #FFF;
+			}
+			.data-zodiac{
+				position: absolute;
+				width: 4rem;
+				height: 4rem;
+				right: 0;
+				top: 0.5rem;
+			}
+			.data-zodiac > img{
+				width: 4rem;
+				height: 4rem;
+			}
+
+			@media screen and (min-width: 480px) {
+				#search-tool-content{
+					width: 40rem;
+				}
+
+				#search-tool-content > .zodiac-row > div{
+					margin: 0 2rem;
+				}
+
+				#search-tool-content > .zodiac-row > div > img{
+					width: 5rem;
+					height: 5rem;
+				}
+			}
+
+			.block-head{
+				position: relative;
+			    margin-bottom: 1rem;
+			    padding: 0 0 1rem;
+			    border-bottom: 1px #e2e2e2 solid;
+			    font-weight: bold;
+			    text-transform: capitalize;
+			    font-size: 1.25rem;
+			    text-align: left;
+			    color: #109822;
+			}
+
+			.block-head:before{
+				content: "";
+				position: absolute;
+				bottom: -3px;
+				left: 20px;
+				width: 35px;
+				height: 5px;
+				background-color: #109822;;
+			}
+
+			.block-head:after{
+				content: "";
+				position: absolute;
+				bottom: -1px;
+				left: 0px;
+				width: 80px;
+				height: 1px;
+				background-color: #109822;;
+			}
+
+			#rotate-content{
+				text-align: center;
+				
+				padding-top: 4rem;
+				padding-left: 0.5rem;
+				padding-right: 0.5rem; 
+			}
+
+			#rotate-content > h2{
+
+			}
+
+			.rotate{
+				display: inline-block;
+				margin: 0 1rem;
+				
+				width: 90%;
+			}
+
+			.rotate-img > img{
+				width: 100%;
+				height: auto;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<div id="toolBar">
+			<div id="topControl-menu">
+				<div class="topControl-menu1"></div>
+				<div class="topControl-menu2"></div>
+				<div class="topControl-menu3"></div>
+			</div>
+		</div>
+
+		<div id="menu">
+			<div id="menuPanel">
+				<img src="images/temple.png" />
+				<a class="active" href="./index.html">
+					<div>
+						<i class="fa fa-home"></i>首頁
+					</div>
+				</a>
+				<a href="./participateList.html?lightName=光明燈">
+					<div>
+						<i class="fa fa-users"></i>光明燈
+					</div>
+				</a>
+				<a href="./participateList.html?lightName=太歲燈">
+					<div>
+						<i class="fa fa-users"></i>太歲燈
+					</div>
+				</a>
+				<a>
+					<div>
+						<i class="fa fa-handshake-o"></i>關於我們
+					</div>
+				</a>
+				<a href="./messageBoard.html">
+					<div>
+						<i class="fa fa-question-circle"></i>留言板
+					</div>
+				</a>
+			</div>
+		</div>
+		<div id="rotate-content">
+			<h3 class="block-head">寺廟景觀</h2>
+			<div class="rotate">
+				<div>
+					<div class="rotate-img">
+						<img src="activity-image/01.jpg" />
+					</div>
+				</div>
+				
+				<div>
+					<div class="rotate-img">
+						<img src="activity-image/02.jpg" />
+					</div>
+				</div>
+
+				<div>
+					<div class="rotate-img">
+						<img src="activity-image/03.jpg" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="content">
+			<h2>
+				溪州鄉順天府丙申年元宵節安太歲名單
+			<h2>
+			<p>
+				本網頁僅提供當地居民查看用
+			</p>
+			<p>
+				絕無商業利益
+			</p>
+		</div>
+		<script src="js/jquery-3.1.1.min.js"></script>
+		<script src="js/velocity.min.js"></script>
+		<script type="text/javascript" src="js/slick.min.js"></script>
+		<script>
+			var menuPanelDisplay = false;
+
+			var menu_animate = false;
+
+			$(function(){
+				$(".rotate").slick({
+					infinite: true,
+					slidesToShow: 4,
+					dots: false,
+					speed: 300,
+					slidesToShow: 2,
+					slidesToScroll: 1,
+					responsive: [
+				    {
+				      breakpoint: 1024,
+				      settings: {
+				        slidesToShow: 2,
+				        slidesToScroll: 2
+				      }
+				    },
+				    {
+				      breakpoint: 640,
+				      settings: {
+				        slidesToShow: 2,
+				        slidesToScroll: 2
+				      }
+				    },
+				    {
+				      breakpoint: 480,
+				      settings: {
+				        slidesToShow: 1,
+				        slidesToScroll: 1
+				      }
+				    }
+				  ]
+				});
+			});
+
+			$("#topControl-menu").click(function(){
+				if(!menu_animate)
+				{
+					menu_animate = true;
+					if(menuPanelDisplay)
+					{
+						
+						$(".topControl-menu1").stop().velocity({left: "50%",top: "25%", width: "60%"},{duration: 200,
+							complete: function(){
+								$(".topControl-menu1").stop().velocity({rotateZ: 0},{duration: 200, complete: function(){
+									menu_animate = false;
+								}});
+							}
+						});
+
+						$(".topControl-menu3").stop().velocity({left: "50%",top: "75%", width: "60%"},{duration: 200,
+							complete: function(){
+								$(".topControl-menu3").stop().velocity({rotateZ: 0},{duration: 200});
+							}
+						});
+
+						$("body").css("overflow-y","auto");
+						$("#menu").fadeOut(400);
+						$("#menuPanel").stop().velocity({left: "-15rem"},{duration: 400});
+
+						menuPanelDisplay = false;
+					}
+					else
+					{
+						$(".topControl-menu1").stop().velocity({left: "40%",top: "38%", width: "40%"},{duration: 200,
+							complete: function(){
+								$(".topControl-menu1").stop().velocity({rotateZ: -45},{duration: 200, complete: function(){
+									menu_animate = false;
+								}});
+							}
+						});
+
+						$(".topControl-menu3").stop().velocity({left: "40%",top: "62%", width: "40%"},{duration: 200,
+							complete: function(){
+								$(".topControl-menu3").stop().velocity({rotateZ: 45},{duration: 200});
+							}
+						});
+
+						$("body").css("overflow-y","hidden");
+						$("#menu").fadeIn(400);
+						$("#menuPanel").stop().velocity({left: "0rem"},{duration: 400});
+
+						menuPanelDisplay = true;
+					}	
+				}
+				
+			});
+
+			window.onclick = function(event) {
+			    if(event.target == $("#menu")[0]) 
+			    {
+			    	if(!menu_animate)
+					{
+						menu_animate = true;
+						$(".topControl-menu1").stop().velocity({left: "50%",top: "25%", width: "60%"},{duration: 200,
+							complete: function(){
+								$(".topControl-menu1").stop().velocity({rotateZ: 0},{duration: 200, complete: function(){
+									menu_animate = false;
+								}});
+							}
+						});
+
+						$(".topControl-menu3").stop().velocity({left: "50%",top: "75%", width: "60%"},{duration: 200,
+							complete: function(){
+								$(".topControl-menu3").stop().velocity({rotateZ: 0},{duration: 200});
+							}
+						});
+
+
+						$("body").css("overflow-y","auto");
+						$("#menu").fadeOut(400);
+						$("#menuPanel").stop().velocity({left: "-15rem"},{duration: 400});
+
+						menuPanelDisplay = false;
+					}
+			    }
+			}
+
+		</script>
+	</body>
+
+</html>

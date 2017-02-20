@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+
+    <!-- 匯入bootstrap css -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+
+    <!-- font-awesome -->
+    <link rel="stylesheet" href="css/font-awesome.min.css" />
+    <link rel="stylesheet" href="css/font-awesome.css" />
+
+    <style>
+        body{
+            margin: 0;
+            font-family: "微軟正黑體";
+        }
+
+        body,div,a,select,input{
+            
+        }
+
+        a:hover,a:focus,a:active{
+            text-decoration: none;
+        }
+
+        input{
+            padding: 0;
+            margin: 0;
+            vertical-align: middle;
+        }
+
+        input:focus{
+            outline: none;
+        }
+
+        .register-row{
+            position: relative;
+            margin: 0 auto;
+            padding: 10px 0px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid #1e67ea;
+        }
+        
+        .register-cell{
+            padding: 10px 0px;
+        }
+
+        .register-cell label{
+            font-size: 18px;
+        }
+
+        .register-cell input[type=text]{
+            padding: 10px 0px;
+            text-align: center;
+            font-size: 18px;
+            border: 2px solid #CCC;
+            margin-left: 10px;
+            width: 50%;
+        }
+
+        .register-row input[type=text]:focus{
+            border-color: #0094ff;
+        }
+
+        .register-row a{
+            position: absolute;
+            right: 10%;
+            top: 50%;
+            color: #FFF;
+            background-color: #1e67ea;
+        }
+
+        .register-row a:hover{
+            color: #1e67ca;
+        }
+
+        .register-row a:active{
+            color: #1e679a;
+        }
+
+        .register-row a > i{
+            margin-top: -40px;
+            font-size: 80px;
+        }
+
+        @media screen and (max-width: 980px) {
+            .register-cell label{
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <div class="register-table">
+            <div class="register-row">
+                <div class="register-cell">
+                    <label>姓名</label><input type="text" placeholder="ex:李忠鍵" />
+                </div>
+                <div class="register-cell">
+                    <label>生日</label><input type="text" placeholder="ex:19950515" />
+                </div>
+                <a id="add-register-row" href="#"><i class="fa fa-plus"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- jquery -->
+    <script type="text/javascript" src="javascript/jquery-3.1.1.min.js"></script>
+
+    <!-- birthday -->
+    <script src="javascript/birthday/birthday.js"></script>
+
+    <script>
+        /*$.ms_DatePicker({
+            YearSelector: "#birthday_Y",
+            MonthSelector: "#birthday_M",
+            DaySelector: "#birthday_D"
+        });*/
+
+        (function ($) {
+            alert($(window).width());
+
+            $("#add-register-row").click(function () {
+                var content = "<div class='register-row'>" +
+                                    "<div class='register-cell'>" +
+                                        "<label>姓名</label><input type='text' placeholder='ex:李忠鍵' />" +
+                                    "</div>" +
+                                    "<div class='register-cell'>" +
+                                        "<label>生日</label><input type='text' placeholder='ex:19950515' />" +
+                                    "</div>" +
+                                    "<a id='add-register-row' href='#'><i class='fa fa-plus-square'></i></a>" +
+                               "</div>";
+                $(".register-table").append(content);
+
+                $(this).attr("id", "");
+
+                $(this).addClass("remove-register-row");
+
+                $(this).removeClass("fa-")
+            });
+        })(jQuery);
+    </script>
+</body>
+</html>

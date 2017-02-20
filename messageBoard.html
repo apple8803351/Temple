@@ -1,0 +1,853 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+		<!-- font-awesome -->
+	    <link rel="stylesheet" href="css/font-awesome.min.css" />
+	    <link rel="stylesheet" href="css/font-awesome.css" />
+
+	    <!-- bookstrap -->
+	    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+
+	    <!-- sweetalert2 -->
+	    <link rel="stylesheet" type="text/css" href="css/sweetalert2.min.css"/>
+
+		<style>
+			*{
+				font-family:Microsoft JhengHei,arial, helvetica, sans-serif;
+				-webkit-box-sizing: border-box;
+			    -moz-box-sizing: border-box;
+			    box-sizing: border-box;
+			}
+
+			*:focus{
+				outline: none;
+			}
+
+			html{
+				font-size: 16px;
+			}
+
+			body{
+				margin: 0;
+				padding: 0;
+				background-color: #CCCCCC;
+			}
+
+			a{
+				text-decoration: none;
+			}
+
+			#search-tool{
+				position: fixed;
+				width: 100%;
+				bottom: 0;
+				z-index: 400;
+			}
+
+			#search-tool-button{
+				position: relative;
+				left: 0;
+				right: 0;
+				bottom: 1rem;
+				margin: auto;
+				background-color: #E9B12F;
+				padding: 0.25rem;
+				border: 1px solid #E9B12F;
+				border-radius: 50%;
+				width: 4rem;
+				height: 4rem;
+				cursor: pointer;
+				-webkit-transition: all 0.5s; 
+    			transition: all 0.5s;
+    			text-align: center;
+    			box-shadow: 0px 0px 15px 1px #333333;
+			}
+
+			#search-tool-button > i{
+				width: 3rem;
+				height: 3rem;
+				line-height: 3rem;
+				font-size: 3rem;
+			}
+
+			#search-tool-button.active{
+				-webkit-transform: rotate(360deg);
+				transform: rotate(360deg);
+			}
+
+			#search-tool-content{
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 6.25rem;
+				margin: auto;
+				width: 20rem;
+				padding: 0.5rem 0.25rem;
+				border-radius: 4px;
+				background-color: #FFF;
+				display: none;
+			}
+
+			#search-tool-content:after{
+				content: "";
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: -2rem;
+				margin: auto;
+				width: 0;
+				height: 0;
+				border: 1rem solid transparent;
+				border-top-color: #FFF;
+			}
+
+			#search-tool-content > .zodiac-row{
+				text-align: center;
+			}
+
+			#search-tool-content > .zodiac-row:not(:last-child){
+				margin-bottom: 0.5rem;
+			}
+
+			#search-tool-content > .zodiac-row > div{
+				display: inline-block;
+				padding: 0.5rem 0.5rem;
+				margin: 0 1rem;
+				text-align: center;
+				border: 2px solid #000;
+				border-radius: 10px;
+				cursor: pointer;
+				box-shadow: 0px 0px 5px 1px #333333;
+			}
+
+			#search-tool-content > .zodiac-row > div:hover{
+				background-color: #CCCCCC;
+			}
+
+			#search-tool-content > .zodiac-row > div > img{
+				width: 3rem;
+				height: 3rem;
+			}
+
+			#toolBar{
+				position: fixed;
+				height: 3.5rem;
+				width: 100%;
+				background-color: #7F46EF;
+				z-index: 200;
+			}
+
+			#topControl-menu{
+				position: absolute;
+				top: 50%;
+				left: 1rem;
+				height: 2rem;
+				width: 2rem;
+				margin-top: -1rem;
+				cursor: pointer;
+			}
+
+			[class*=topControl-menu]{
+				position: absolute;
+				left: 50%;
+				height: 0px;
+				width: 60%;
+				margin-left: -30%;
+				border: 1px solid #FFF;
+			}
+
+			.topControl-menu1{
+				top: 25%;
+			}
+
+			.topControl-menu2{
+				top: 50%;
+			}
+
+			.topControl-menu3{
+				top: 75%;
+			}
+
+			#menu{
+				position: fixed;
+				top: 3.5rem;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: 999;
+				display: none;
+			}
+
+			#menuPanel{
+				position: absolute;
+				width: 15rem;
+				height: 100%;
+				left: -15rem;
+				background-color: #FFF;
+				color: #666666;
+			}
+
+			#menuPanel > img {
+				width: 100%;
+				height: auto;
+			}
+
+			#menuPanel > a{
+				text-decoration: none;
+				color: #666666;
+			}
+
+			#menuPanel > a.active{
+				color: #569AF3;
+			}
+
+			#menuPanel > a > div{
+				font-size: 1.25rem;
+				padding-top: 1rem;
+				padding-bottom: 1rem;
+				cursor: pointer;
+			}
+
+			#menuPanel > a > div:hover{
+				background-color: #CCC;
+			}
+
+			#menuPanel > a > div > i{
+				width: 30px;
+				text-align: center;
+				font-size: 1.5rem;
+				margin-left: 1.5rem;
+				margin-right: 2rem;
+			}
+
+			#content{
+				padding-top: 3.5rem;
+			}
+
+			#participateList{
+				position: relative;
+				max-width: 50rem;
+				padding-left: 0.5rem;
+				padding-right: 0.5rem;
+				margin: auto;
+				width: 100%;
+				z-index: 100;
+			}
+
+			.data{
+				position: relative;
+				width: 100%;
+				height: 5rem;
+				padding-top: 0.5rem;
+				padding-bottom: 0.5rem;
+				border-bottom: 1px #C8C8C8 solid;
+			}
+
+			.data-number{
+				position: relative;
+				width: 4rem;
+				height: 100%;
+				line-height: 4rem;
+				font-size: 2rem;
+				text-align: center;
+				background-color: #5E92FC;
+				color: #FFF;
+			}
+			.data-name{
+				position: absolute;
+				width: calc(100% - 4.5rem);
+				height: 2rem;
+				left: 4.5rem;
+				top: 0.5rem;
+				line-height: 2rem;
+				font-size: 1rem;
+				color: #FFF;
+			}
+			.data-birthday{
+				position: absolute;
+				width: calc(100% - 4.5rem);
+				height: 2rem;
+				left: 4.5rem;
+				top: 2.5rem;
+				line-height: 2rem;
+				font-size: 1rem; 
+				color: #FFF;
+			}
+			.data-zodiac{
+				position: absolute;
+				width: 4rem;
+				height: 4rem;
+				right: 0;
+				top: 0.5rem;
+			}
+			.data-zodiac > img{
+				width: 4rem;
+				height: 4rem;
+			}
+
+			#loadBox{
+				position: fixed;
+				top: 50%;
+				left: 50%;
+			}
+
+			.leaveMessage-row{
+				margin-bottom: 1rem;
+			}
+
+			.leaveMessage-row label{
+				display: block;
+			}
+
+			.leaveMessage-row input[type='text']{
+				width: 100%;
+				padding: 12px 15px;
+			}
+
+			.leaveMessage-row textarea{
+				width: 100%;
+				height: 10rem;
+				resize: none;
+				padding: 12px 15px;
+			}
+
+			.sendButton{
+				width: 100%;
+				padding: 0.5rem 0;
+				border-radius: 4px;
+				text-align: center;
+				background-color: #6D84F4;
+				cursor: pointer;
+				color: #FFF;
+				font-size: 1rem;
+				font-weight: bold;
+			}
+
+			.sendButton:active{
+				background-color: #6D84A4;
+			}
+
+			#leaveMessageButton{
+				position: fixed;
+				right: 2rem;
+				bottom: 2rem;
+				background-color: #E9B12F;
+				padding: 0.25rem;
+				border: 1px solid #E9B12F;
+				border-radius: 50%;
+				width: 4rem;
+				height: 4rem;
+				cursor: pointer;
+    			text-align: center;
+    			box-shadow: 0px 0px 15px 1px #333333;
+    			z-index: 400;
+			}
+
+			#leaveMessageButton > i{
+				width: 3rem;
+				height: 3rem;
+				line-height: 3rem;
+				font-size: 3rem;
+			}
+
+			.leaveMessageList-row{
+				position: relative;
+				padding: 1rem 1rem;
+				background-color: #FFF;
+				margin-bottom: 1rem;
+				margin-left: 0.5rem;
+				margin-right: 0.5rem;
+			}
+
+			.leaveMessageList-level{
+				position: absolute;
+				top: 1rem;
+				right: 1rem;
+			}
+
+			.leaveMessageList-title{
+				margin-bottom: 1rem;
+			}
+
+			.leaveMessageList-picture{
+				float: left;
+				text-align: center;
+			}
+
+			.leaveMessageList-picture > img{
+				width: 3rem;
+				height: 3rem;
+				margin-right: 1rem;
+			}
+
+			.leaveMessageList-name{
+				height: 1rem;
+				margin-bottom: 1rem;
+				line-height: 1rem;
+				font-weight: bold;
+				color: #4E7FC9;
+			}
+
+			.leaveMessageList-time{
+				height: 1rem;
+				line-height: 1rem;
+				font-weight: bold;
+				color: #888888;
+			}
+
+			.leaveMessageList-content{
+				font-size: 1.5rem;
+			}
+
+			@media screen and (min-width: 480px) {
+				#search-tool-content{
+					width: 40rem;
+				}
+
+				#search-tool-content > .zodiac-row > div{
+					margin: 0 2rem;
+				}
+
+				#search-tool-content > .zodiac-row > div > img{
+					width: 5rem;
+					height: 5rem;
+				}
+			}
+
+
+		</style>
+
+		<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=zh-TW&onload=onloadCallback&render=explicit" async defer></script>
+
+	</head>
+
+	<body>
+		<div id="toolBar">
+			<div id="topControl-menu">
+				<div class="topControl-menu1"></div>
+				<div class="topControl-menu2"></div>
+				<div class="topControl-menu3"></div>
+			</div>
+		</div>
+
+		<div id="menu">
+			<div id="menuPanel">
+				<img src="images/temple.png" />
+				<a href="./index.html">
+					<div>
+						<i class="fa fa-home"></i>首頁
+					</div>
+				</a>
+				<a href="./participateList.html?lightName=光明燈">
+					<div>
+						<i class="fa fa-users"></i>光明燈
+					</div>
+				</a>
+				<a href="./participateList.html?lightName=太歲燈">
+					<div>
+						<i class="fa fa-users"></i>太歲燈
+					</div>
+				</a>
+				<a>
+					<div>
+						<i class="fa fa-handshake-o"></i>關於我們
+					</div>
+				</a>
+				<a class="active" href="./messageBoard.html">
+					<div>
+						<i class="fa fa-question-circle"></i>留言板
+					</div>
+				</a>
+			</div>
+		</div>
+		
+		<div id="leaveMessageButton"  data-toggle="modal" data-target="#Modal">
+			<i class="fa fa-pencil"></i>
+		</div>
+
+		<div class="modal fade" id="Modal"  role="dialog" >
+  			<div class="modal-dialog" role="document">
+    			<div class="modal-content">
+    				<div class="modal-header">
+    					<button type="button" class="close" data-dismiss="modal">&times;</button>
+    				</div>
+    				<div class="modal-body">
+
+    					<div class="leaveMessage-table">
+							<div class="leaveMessage-row">
+								<label>暱稱</label>
+								<input type="text" id="nickname"/>
+							</div>
+							<div class="leaveMessage-row">
+								<label>內容</label>
+								<textarea id="message"></textarea>
+							</div>
+							<div class="leaveMessage-row">
+								<label>驗證</label>
+								<div id="g-recaptcha" style="margin: 0 auto;display: table;">
+								</div>
+							</div>
+						</div>
+						<div class="sendButton" id="sendMessageButton">
+							留言
+						</div>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+
+		<div id="content">
+			<div id="leaveMessageList">
+				<!--
+				<div class="leaveMessageList-row">
+					<div class="leaveMessageList-level">
+						1
+					</div>
+					<div class="leaveMessageList-title">
+						<div class="leaveMessageList-picture">
+							<img src="images/user.png" />
+						</div>
+						<div class="leaveMessageList-name">
+							阿鍵
+						</div>
+						<div class="leaveMessageList-time">
+							1秒鐘前
+						</div>
+						<div style="clear: both">
+						</div>
+					</div>
+					<div class="leaveMessageList-body">
+						<div class="leaveMessageList-content">
+							大家好
+						</div>
+					</div>
+					
+				</div>
+				<div class="leaveMessageList-row">
+					<div class="leaveMessageList-level">
+						1
+					</div>
+					<div class="leaveMessageList-title">
+						<div class="leaveMessageList-picture">
+							<img src="images/user.png" />
+						</div>
+						<div class="leaveMessageList-name">
+							阿鍵
+						</div>
+						<div class="leaveMessageList-time">
+							1秒鐘前
+						</div>
+						<div style="clear: both">
+						</div>
+					</div>
+					<div class="leaveMessageList-body">
+						<div class="leaveMessageList-content">
+							大家好
+						</div>
+					</div>
+				</div>
+				-->
+			</div>
+		</div>
+
+		<script src="js/jquery-3.1.1.min.js"></script>
+
+		<script src="js/sweetalert2.min.js"></script> 
+
+    	<script src="bootstrap/javascript/bootstrap.min.js"></script>
+
+		<script src="js/velocity.min.js"></script>
+		<script>
+
+			var isRecaptcha = false;
+
+			var menuPanelDisplay = false;
+
+			var windowHeight = 0;
+
+			var nowLength = 0;
+
+			var notData = false;
+			var running = false;
+
+			var menu_animate = false;
+
+			$(function(){
+				windowHeight = $(window).height();
+
+				getValue(0, 10);
+			});
+
+
+			$("#topControl-menu").click(function(){
+				if(!menu_animate)
+				{
+					menu_animate = true;
+					if(menuPanelDisplay)
+					{
+						
+						$(".topControl-menu1").stop().velocity({left: "50%",top: "25%", width: "60%"},{duration: 200,
+							complete: function(){
+								$(".topControl-menu1").stop().velocity({rotateZ: 0},{duration: 200, complete: function(){
+									menu_animate = false;
+								}});
+							}
+						});
+
+						$(".topControl-menu3").stop().velocity({left: "50%",top: "75%", width: "60%"},{duration: 200,
+							complete: function(){
+								$(".topControl-menu3").stop().velocity({rotateZ: 0},{duration: 200});
+							}
+						});
+
+						$("body").css("overflow-y","auto");
+						$("#menu").fadeOut(400);
+						$("#menuPanel").stop().velocity({left: "-15rem"},{duration: 400});
+
+						menuPanelDisplay = false;
+					}
+					else
+					{
+						$(".topControl-menu1").stop().velocity({left: "40%",top: "38%", width: "40%"},{duration: 200,
+							complete: function(){
+								$(".topControl-menu1").stop().velocity({rotateZ: -45},{duration: 200, complete: function(){
+									menu_animate = false;
+								}});
+							}
+						});
+
+						$(".topControl-menu3").stop().velocity({left: "40%",top: "62%", width: "40%"},{duration: 200,
+							complete: function(){
+								$(".topControl-menu3").stop().velocity({rotateZ: 45},{duration: 200});
+							}
+						});
+
+						$("body").css("overflow-y","hidden");
+						$("#menu").fadeIn(400);
+						$("#menuPanel").stop().velocity({left: "0rem"},{duration: 400});
+
+						menuPanelDisplay = true;
+					}	
+				}
+			});
+
+			window.onclick = function(event) {
+			    if(event.target == $("#menu")[0]) 
+			    {
+			    	if(!menu_animate)
+					{
+						menu_animate = true;
+
+						$(".topControl-menu1").stop().velocity({left: "50%",top: "25%", width: "60%"},{duration: 200,
+							complete: function(){
+								$(".topControl-menu1").stop().velocity({rotateZ: 0},{duration: 200, complete: function(){
+									menu_animate = false;
+								}});
+							}
+						});
+
+						$(".topControl-menu3").stop().velocity({left: "50%",top: "75%", width: "60%"},{duration: 200,
+							complete: function(){
+								$(".topControl-menu3").stop().velocity({rotateZ: 0},{duration: 200});
+							}
+						});
+
+						
+						$("body").css("overflow-y","auto");
+						$("#menu").fadeOut(400);
+						$("#menuPanel").stop().velocity({left: "-15rem"},{duration: 400});
+
+						menuPanelDisplay = false;
+					}
+			    }
+			}
+
+			$("#sendMessageButton").click(function(){
+				if(isRecaptcha)
+				{
+					var nickname = $("#nickname").val();
+					var message = $("#message").val();
+
+					if(nickname === "" || message === "")
+					{
+						alert("請將內容填滿再送出");
+					}
+					else
+					{
+						$.ajax({
+							url: "./data_source/insertLeaveMessage.ashx",
+							type: "POST",
+							dataType: "text",
+							async: false,
+							data: {nickname: nickname, message: message},
+							success: function(result)
+							{
+								var h2 = (result === "Success")? "留言成功" : "留言失敗";
+								var type = (result === "Success")? "success" : "warning";
+
+								swal({
+										allowOutsideClick: false,
+										allowEscapeKey: false,
+										allowEnterKey: false,
+										html: "<h2>" + h2 +"</h2>",
+										type: type
+								}).then(
+									function(){
+										window.location.href = "./messageBoard.html"
+									}
+								);
+							},
+							error: function(data)
+							{
+								swal({
+										allowOutsideClick: false,
+										allowEscapeKey: false,
+										allowEnterKey: false,
+										html: "<h2>" + data + "</h2>",
+										type: "error"
+								}).then(
+									function(){
+										window.location.href = "./messageBoard.html"
+									}
+								);
+							}
+						});
+					}
+				}
+				else
+				{
+					alert("尚未通過驗證");
+				}
+			});
+
+			function getValue(start, length)
+			{
+				$.ajax({
+					url: "./data_source/getLeaveMessage.ashx",
+					type: "POST",
+					dataType: "json",
+					data: {start : start, length, length},
+					async: false,
+					success: function(response){
+						for(var i = 0 ; i < response.length ; i++)
+						{
+							addContent(nowLength + (i + 1),response[i].nickname, response[i].leaveMessageTime, response[i].message);
+						}
+
+						nowLength = nowLength + length;
+
+						if(response.length < length)
+						{
+							notData = true;
+						}
+
+						running = false;
+					},
+					error: function(){
+						alert("...");
+					}
+				});
+			}
+
+			function addContent(number, name, datetime, message)
+			{
+				var str = "" + 
+				"<div class='leaveMessageList-row'>" + 
+					"<div class='leaveMessageList-level'>" +
+						"#" + number + " 樓" +
+					"</div>" +
+					"<div class='leaveMessageList-title'>" +
+						"<div class='leaveMessageList-picture'>" +
+							"<img src='images/user.png' />" +
+						"</div>" +
+						"<div class='leaveMessageList-name'>" +
+							name + 
+						"</div>" +
+						"<div class='leaveMessageList-time'>" +
+							datetime + 
+						"</div>" +
+						"<div style='clear: both'>" +
+						"</div>" +
+					"</div>" +
+					"<div class='leaveMessageList-body'>" +
+						"<div class='leaveMessageList-content'>" +
+							message + 
+						"</div>" + 
+					"</div>" +
+				"</div>";
+
+				$("#leaveMessageList").append(str);
+			}
+
+			$(window).scroll(function(){
+				if(!notData && !running)
+				{
+					var htmlHeight = $(document).height();
+
+					var windowScrollTop = $(this).scrollTop();
+					
+					if(windowScrollTop >= (htmlHeight - windowHeight - 100))
+					{
+						running = true;
+
+						getValue(nowLength, 10);
+					}
+				}
+			});
+		</script>
+		<script>
+			var verifyCallback = function(response){
+
+            	var request = new XMLHttpRequest();
+            	request.open("POST", "./data_source/get_reCAPTCHA_result.ashx");
+
+            	var data = "g-recaptcha-response=" + response;
+            	request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            	request.send(data);
+
+            	request.onreadystatechange = function () {
+               		if(request.readyState == 4)
+                	{
+                    	if(request.status == 200)
+                    	{
+                        	var type = request.getResponseHeader("Content-Type");
+
+	                        if(type.indexOf("application/json") === 0)
+	                        {
+	                            var data = JSON.parse(request.responseText);
+	                            var success = document.getElementById("success");
+
+	                            if(data.success)
+	                            {
+	                                isRecaptcha = true;
+	                            }
+	                            else
+	                            {
+	                                isRecaptcha = false;
+	                            }
+	                        }
+	                    }
+	                    else
+	                    {
+	                        isRecaptcha = false;
+	                    }
+	                }
+	            };
+        	};
+
+        	var onloadCallback = function () {
+            	grecaptcha.render(
+                	'g-recaptcha', {
+                    	'sitekey': '6LfmHxYUAAAAABOjBIrRkbmEKPxxKPyzWhBIbf-D',
+                    	'callback': verifyCallback,
+                    	'theme': 'light'
+                	}
+            	);
+        	};
+		</script>
+	</body>
+
+</html>
